@@ -1,0 +1,73 @@
+import tkinter as tk
+from tkinter import messagebox
+from semantic import SemanticAnalyzer, SemanticError
+
+
+class SemanticGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Analisador Semântico")
+
+        # Configurar a janela principal
+        self.setup_ui()
+
+    def setup_ui(self):
+        # Área de entrada para o código
+        tk.Label(self.root, text="Insira o código:").pack(anchor="w", padx=10, pady=5)
+        self.code_input = tk.Text(self.root, height=15, width=60, wrap=tk.WORD)
+        self.code_input.pack(padx=10, pady=5)
+
+        # Botão para executar a análise semântica
+        self.analyze_button = tk.Button(
+            self.root, text="Analisar Semântica", command=self.run_analysis
+        )
+        self.analyze_button.pack(pady=10)
+
+        # Área de saída para os resultados
+        tk.Label(self.root, text="Resultados:").pack(anchor="w", padx=10, pady=5)
+        self.result_output = tk.Text(self.root, height=10, width=60, wrap=tk.WORD, state=tk.DISABLED)
+        self.result_output.pack(padx=10, pady=5)
+
+    def run_analysis(self):
+        """
+        Executa a análise semântica no código fornecido.
+        """
+        code = self.code_input.get("1.0", tk.END).strip()
+
+        if not code:
+            messagebox.showerror("Erro", "Por favor, insira um código para análise.")
+            return
+
+        try:
+            # Simulação do fluxo de análise semântica
+            analyzer = SemanticAnalyzer()
+            self.simulate_analysis(analyzer, code)
+
+            # Mostra mensagem de sucesso
+            self.display_result("Análise semântica concluída sem erros.")
+        except SemanticError as e:
+            self.display_result(f"Erro semântico: {str(e)}")
+        except Exception as e:
+            self.display_result(f"Erro inesperado: {str(e)}")
+
+    def simulate_analysis(self, analyzer, code):
+        """
+        Simula o processo de análise semântica (ajuste conforme necessário para o parser real).
+        """
+        # Simulação de declarações e atribuições
+        analyzer.declare_variable("x", "inteiro")
+        analyzer.declare_variable("y", "decimal")
+
+        analyzer.check_assignment("x", "inteiro")  # x := 10;
+        analyzer.check_assignment("y", "decimal")  # y := x + 3.5;
+
+        # Simulação de operação e condição
+        result_type = analyzer.check_operation("inteiro", "decimal")
+        analyzer.check_condition("x")
+
+    def display_result(self, result):
+        """
+        Exibe os resultados na área de saída.
+        """
+        self.result_output.config(state=tk.NORMAL)
+        self.result_output.delete("1.0", tk
