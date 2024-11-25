@@ -3,6 +3,7 @@ from lexer import lexer
 from parser import parser
 from semantic import SemanticAnalyzer, SemanticError
 from generator import CodeGenerator
+from ast import
 
 def main():
     # Solicita ao usuário um arquivo de entrada
