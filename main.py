@@ -72,31 +72,4 @@ def main():
 if __name__ == "__main__":
     main()
     
-    def main():
-    # Exemplo de programa simples:
-    # inteiro x;
-    # x := 10 + 5;
     
-    # Construção da AST:
-    # 1. Declaração da variável x do tipo inteiro
-    decl_x = VariableDeclaration("x", "inteiro")
-    
-    # 2. Expressão binária (10 + 5)
-    expr = BinaryOperation(Number(10), "+", Number(5))
-    
-    # 3. Atribuição de 10 + 5 para a variável x
-    assign_x = Assignment("x", expr)
-    
-    # 4. Programa que contém a declaração e a atribuição
-    program = Program([decl_x, assign_x])
-    
-    # Exibindo a AST:
-    print("Programa:")
-    for stmt in program.statements:
-        if isinstance(stmt, VariableDeclaration):
-            print(f"Declaração de variável: {stmt.var_name} do tipo {stmt.var_type}")
-        elif isinstance(stmt, Assignment):
-            print(f"Atribuição: {stmt.var_name} := {stmt.expression.left.value} {stmt.expression.operator} {stmt.expression.right.value}")
-
-if __name__ == "__main__":
-    main()
