@@ -1,4 +1,4 @@
-from ast import 
+import astcode
 
 class CodeGenerator:
     def __init__(self):
