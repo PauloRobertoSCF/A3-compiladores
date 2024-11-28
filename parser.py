@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens  # Importa os tokens definidos no lexer.py
-
+from ast import BinaryOpNode, ASTNode  # Importe o BinaryOpNode e outros nós necessários
 # Regras de produção
 
 # Regra inicial (para começar a análise a partir do programa completo)
