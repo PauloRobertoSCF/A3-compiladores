@@ -35,14 +35,15 @@ class AssignmentNode(ASTNode):
 
 
 class BinaryOpNode(ASTNode):
-    """Nó para operações binárias (e.g., soma, subtração)."""
+    """Nó para operações binárias (e.g., soma, subtração, multiplicação)."""
     def __init__(self, left, operator, right):
-        self.left = left
-        self.operator = operator
-        self.right = right
+        self.left = left       # Operando esquerdo
+        self.operator = operator  # Operador (+, -, *)
+        self.right = right     # Operando direito
 
     def accept(self, visitor):
         return visitor.visit_binary_op(self)
+
 
 
 class IfNode(ASTNode):
