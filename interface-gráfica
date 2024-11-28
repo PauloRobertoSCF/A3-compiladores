@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import ply.lex as lex  # Importa o lexer configurado
 from parser import parser  # Supondo que o parser esteja configurado em parser.py
-from semantic import SemanticAnalyzer  # Classe de análise semântica em semantic.py
+from semantic import SemanticAnalyzer, SemanticError
 from code_generator import CodeGenerator  # Classe para geração de código em code_generator.py
 
 
