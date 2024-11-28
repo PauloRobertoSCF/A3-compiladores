@@ -16,10 +16,10 @@ class CodeGenerator:
         expr = node.expression.accept(self)
         self.code.append(f"{node.var_name} = {expr};")
 
-    def visit_binary_op(self, node):
-        left = node.left.accept(self)
-        right = node.right.accept(self)
-        return f"({left} {node.operator} {right})"
+   def visit_binary_op(self, node):
+    left_code = node.left.accept(self)
+    right_code = node.right.accept(self)
+    return f"({left_code} {node.operator} {right_code})"
 
     def visit_if(self, node):
         condition = node.condition.accept(self)
