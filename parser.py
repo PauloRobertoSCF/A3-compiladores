@@ -32,6 +32,7 @@ def p_expression_math(p):
                   | expression MINUS expression
                   | expression TIMES expression
                   | expression DIVIDE expression'''
+    p[0] = BinaryOpNode(p[1], p[2], p[3])  # Cria um nó de operação binária
     pass
 
 # Expressão com parênteses (para prioridade)
