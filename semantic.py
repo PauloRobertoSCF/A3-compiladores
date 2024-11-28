@@ -37,12 +37,14 @@ class SemanticAnalyzer:
             raise SemanticError(f"Erro: Atribuição incompatível. Esperado '{var_type}', recebido '{value_type}'.")
 
     def check_operation(self, left_type, right_type, operator):
-        """Valida operações entre tipos."""
-        if left_type == right_type:
-            return left_type
-        if (left_type, right_type) in [("inteiro", "decimal"), ("decimal", "inteiro")]:
-            return "decimal"
-        raise SemanticError(f"Erro: Operação '{operator}' inválida entre '{left_type}' e '{right_type}'.")
+    """Valida operações entre tipos."""
+    if left_type == right_type == "inteiro":
+        return "inteiro"  # Retorna tipo inteiro se ambos os operandos forem inteiros
+    elif (left_type, right_type) in [("inteiro", "decimal"), ("decimal", "inteiro"), ("decimal", "decimal")]:
+        return "decimal"  # Operações com decimais resultam em decimal
+    else:
+        raise SemanticError(f"Operação '{operator}' inválida entre '{left_type}' e '{right_type}'.")
+
 
 class SemanticError(Exception):
     """Classe para representar erros semânticos."""
