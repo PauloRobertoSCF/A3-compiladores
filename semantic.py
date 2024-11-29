@@ -35,6 +35,34 @@ class SemanticAnalyzer:
                 # Permitir conversão implícita
                 return
             raise SemanticError(f"Erro: Atribuição incompatível. Esperado '{var_type}', recebido '{value_type}'.")
+                def analyze_program(self, program_ast):
+        """Análise semântica do programa, que seria um AST (Abstract Syntax Tree)."""
+        for statement in program_ast.statements:
+            self.analyze_statement(statement)
+
+    def analyze_statement(self, statement):
+        """Processa cada tipo de declaração de forma apropriada."""
+        if isinstance(statement, DeclarationNode):
+            self.declare_variable(statement.var_name, statement.var_type)
+        elif isinstance(statement, AssignmentNode):
+            var_type = self.check_variable(statement.var_name)
+            self.check_assignment(statement.var_name, statement.expression)
+        elif isinstance(statement, BinaryOpNode):
+            left_type = self.analyze_expression(statement.left)
+            right_type = self.analyze_expression(statement.right)
+            self.check_operation(left_type, right_type, statement.operator)
+
+    def analyze_expression(self, expression):
+        """Analisa as expressões e retorna o tipo de resultado."""
+        if isinstance(expression, BinaryOpNode):
+            left_type = self.analyze_expression(expression.left)
+            right_type = self.analyze_expression(expression.right)
+            return self.check_operation(left_type, right_type, expression.operator)
+        elif isinstance(expression, VariableNode):
+            return self.check_variable(expression.var_name)
+        else:
+            return expression.type
+
 
     def check_operation(self, left_type, right_type, operator):
     """Valida operações entre tipos."""
