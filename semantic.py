@@ -40,6 +40,62 @@ class SemanticAnalyzer:
         for statement in program_ast.statements:
             self.analyze_statement(statement)
 
+            
+    def analyze_program(self, node):
+        """Função principal para análise semântica de todo o programa."""
+        if isinstance(node, ProgramNode):
+            # Percorre todas as instruções no programa (ast do tipo ProgramNode)
+            for statement in node.statements:
+                self.analyze_program(statement)  # Chama recursivamente para cada instrução (declarando, atribuindo, etc.)
+
+        elif isinstance(node, DeclarationNode):
+            # Declara uma variável, verificando se o tipo e o nome são válidos
+            self.declare_variable(node.var_name, node.var_type)
+
+        elif isinstance(node, AssignmentNode):
+            # Verifica se a variável foi declarada e se a atribuição tem o tipo correto
+            var_type = self.check_variable(node.var_name)
+            value_type = self.analyze_expression(node.expression)
+            self.check_assignment(node.var_name, value_type)
+
+        elif isinstance(node, BinaryOpNode):
+            # Analisa as expressões binárias, verificando os tipos das operações
+            left_type = self.analyze_expression(node.left)
+            right_type = self.analyze_expression(node.right)
+            self.check_operation(left_type, right_type, node.operator)
+
+        elif isinstance(node, IfNode):
+            # Analisa a estrutura condicional
+            condition_type = self.analyze_expression(node.condition)
+            if condition_type != "inteiro":
+                raise SemanticError(f"Erro: Condição de 'if' deve ser do tipo 'inteiro', mas é '{condition_type}'")
+            # Analisa as instruções dentro do if e else
+            self.enter_scope()
+            self.analyze_program(node.then_branch)
+            if node.else_branch:
+                self.analyze_program(node.else_branch)
+            self.exit_scope()
+
+        elif isinstance(node, WhileNode):
+            # Analisa o laço while
+            condition_type = self.analyze_expression(node.condition)
+            if condition_type != "inteiro":
+                raise SemanticError(f"Erro: Condição de 'while' deve ser do tipo 'inteiro', mas é '{condition_type}'")
+            # Analisa o corpo do while
+            self.enter_scope()
+            self.analyze_program(node.body)
+            self.exit_scope()
+
+        elif isinstance(node, WriteNode):
+            # Analisa a instrução de escrita
+            value_type = self.analyze_expression(node.expression)
+            if value_type not in ["inteiro", "decimal", "texto"]:
+                raise SemanticError(f"Erro: 'escreva' não pode escrever o tipo '{value_type}'")
+
+        elif isinstance(node, ReadNode):
+            # Analisa a instrução de leitura
+            self.check_variable(node.var_name)
+
     def analyze_statement(self, statement):
         """Processa cada tipo de declaração de forma apropriada."""
         if isinstance(statement, DeclarationNode):
