@@ -44,6 +44,16 @@ class BinaryOpNode(ASTNode):
     def accept(self, visitor):
         return visitor.visit_binary_op(self)
 
+        
+class VariableNode(ASTNode):
+    """Nó para variáveis (usado em expressões ou atribuições)."""
+    def __init__(self, var_name):
+        self.var_name = var_name  # O nome da variável
+
+    def accept(self, visitor):
+        """Permite que o visitante (visitor) passe por este nó."""
+        return visitor.visit_variable(self)
+
 
 
 class IfNode(ASTNode):
