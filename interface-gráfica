@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from lexer import create_lexer  # Importando a função de criação do lexer
 import ply.lex as lex  # Importa o lexer configurado
 from parser import parser  # Supondo que o parser esteja configurado em parser.py
 from semantic import SemanticAnalyzer, SemanticError
