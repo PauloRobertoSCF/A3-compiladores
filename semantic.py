@@ -1,3 +1,6 @@
+from astcode import ProgramNode, ReadNode, WhileNode, IfNode, WriteNode
+from astcode import BinaryOpNode, DeclarationNode, AssignmentNode, VariableNode, ASTNode
+
 class SemanticAnalyzer:
     def __init__(self):
         self.symbol_table = [{}]  # Pilha de escopos (cada escopo é um dicionário)
@@ -35,12 +38,7 @@ class SemanticAnalyzer:
                 # Permitir conversão implícita
                 return
             raise SemanticError(f"Erro: Atribuição incompatível. Esperado '{var_type}', recebido '{value_type}'.")
-                def analyze_program(self, program_ast):
-        """Análise semântica do programa, que seria um AST (Abstract Syntax Tree)."""
-        for statement in program_ast.statements:
-            self.analyze_statement(statement)
 
-            
     def analyze_program(self, node):
         """Função principal para análise semântica de todo o programa."""
         if isinstance(node, ProgramNode):
@@ -119,28 +117,26 @@ class SemanticAnalyzer:
         else:
             return expression.type
 
-
     def check_operation(self, left_type, right_type, operator):
-    """Valida operações entre tipos."""
-    if left_type == right_type == "inteiro":
-        return "inteiro"  # Retorna tipo inteiro se ambos os operandos forem inteiros
-    elif (left_type, right_type) in [("inteiro", "decimal"), ("decimal", "inteiro"), ("decimal", "decimal")]:
-        return "decimal"  # Operações com decimais resultam em decimal
-    else:
-        raise SemanticError(f"Operação '{operator}' inválida entre '{left_type}' e '{right_type}'.")
+        """Valida operações entre tipos."""
+        if left_type == right_type == "inteiro":
+            return "inteiro"  # Retorna tipo inteiro se ambos os operandos forem inteiros
+        elif (left_type, right_type) in [("inteiro", "decimal"), ("decimal", "inteiro"), ("decimal", "decimal")]:
+            return "decimal"  # Operações com decimais resultam em decimal
+        else:
+            raise SemanticError(f"Operação '{operator}' inválida entre '{left_type}' e '{right_type}'.")
 
 
 class SemanticError(Exception):
     """Classe para representar erros semânticos."""
     pass
  
- if __name__ == "__main__":
+if __name__ == "__main__":
     analyzer = SemanticAnalyzer()
     try:
-        analyzer.analyze_program(program_ast)
+        analyzer.analyze_program(ProgramNode)
         print("Análise semântica concluída com sucesso.")
     except SemanticError as e:
         print(f"Erro semântico: {e}")
-
 
  
