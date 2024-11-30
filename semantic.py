@@ -139,4 +139,10 @@ if __name__ == "__main__":
     except SemanticError as e:
         print(f"Erro semântico: {e}")
 
+
+ 
+
+    except SemanticError as e:
+        print(f"Erro semântico: {e}")
+
  
