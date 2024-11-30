@@ -1,12 +1,13 @@
 import ply.yacc as yacc
-from lexer import tokens
+from lexer import tokens, create_lexer
+
+
 
 # Tabela de símbolos para armazenar variáveis
 symbol_table = {}
-    'a': 'INT_TYPE',       # a é do tipo inteiro
-    'b': 'FLOAT_TYPE',     # b é do tipo decimal (float)
-    'nome': 'STRING_TYPE', # nome é do tipo texto (string)
-}
+a: int = 'INT_TYPE',      # a é do tipo inteiro
+b: float = 'FLOAT_TYPE',     # b é do tipo decimal (float)
+nome = 'STRING_TYPE'; # nome é do tipo texto (string)
 
 # Regras de Produção
 
@@ -86,14 +87,20 @@ def p_error(p):
 # Construção do parser
 parser = yacc.yacc()
 
+def parse_input(input_text):
+    return parser.parse(input_text)  # A função parse é usada dessa maneira
+
+
 # Função para analisar um programa
 def analyze_program(program_code):
+    lexer = create_lexer()
     lexer.input(program_code)
     parser.parse(program_code)
 # Lexer e Parser implementados anteriormente
 
 # Função de análise do programa
 def analyze_program(program_code):
+    lexer = create_lexer()
     lexer.input(program_code)
     parser.parse(program_code)
 
@@ -113,7 +120,7 @@ def generate_python_code():
 
      # Adicionar um exemplo de estrutura de repetição "while"
     python_code += "\n# Estrutura de repetição (while)\n"
-    python_code += "while a < 10:\n"
+    python_code += "while a <10:\n"
     python_code += "    a += 1\n"
     
     # Adicionar um exemplo de estrutura de repetição "for"
@@ -138,10 +145,10 @@ programa
     a := 10;
     b := 5.5;
     escreva(a + b);
-    se a > b então
-        escreva('Maior');
-    senão
-        escreva('Menor');
+    se a > b
+        escreva(Maior);
+    senao
+        escreva(Menor);
     fimprog
 '''
 
@@ -152,5 +159,4 @@ generated_code = generate_python_code()
 # Exibindo o código Python gerado
 print("Código gerado em Python:")
 print(generated_code)
-
 
