@@ -1,9 +1,8 @@
 import sys
 from lexer import lexer
-from parser import parser
+from parsercode import parser
 from semantic import SemanticAnalyzer, SemanticError
 from code_generator import CodeGenerator
-import astcode
 
 def main():
     # Solicita ao usuário um arquivo de entrada
