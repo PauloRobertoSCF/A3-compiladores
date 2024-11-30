@@ -3,6 +3,10 @@ from lexer import tokens
 
 # Tabela de símbolos para armazenar variáveis
 symbol_table = {}
+    'a': 'INT_TYPE',       # a é do tipo inteiro
+    'b': 'FLOAT_TYPE',     # b é do tipo decimal (float)
+    'nome': 'STRING_TYPE', # nome é do tipo texto (string)
+}
 
 # Regras de Produção
 
@@ -106,6 +110,16 @@ def generate_python_code():
     
     # Adicionar operações matemáticas simples e expressões
     python_code += "x = a + b * c\n"  # Exemplo de operação matemática
+
+     # Adicionar um exemplo de estrutura de repetição "while"
+    python_code += "\n# Estrutura de repetição (while)\n"
+    python_code += "while a < 10:\n"
+    python_code += "    a += 1\n"
+    
+    # Adicionar um exemplo de estrutura de repetição "for"
+    python_code += "\n# Estrutura de repetição (for)\n"
+    python_code += "for i in range(5):\n"
+    python_code += "    print(i)\n"
     
     # Exemplo de uma estrutura de controle
     python_code += "if a > b:\n"
