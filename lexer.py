@@ -1,5 +1,6 @@
 import ply.lex as lex  # Importa a biblioteca PLY (Python Lex-Yacc) para análise léxica
 
+
 # Lista de tokens para a linguagem fictícia
 tokens = [
     'ID', 'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE',  # Tokens para operações matemáticas
@@ -18,7 +19,7 @@ reserved = {
     'programa': 'PROGRAM',  # Início do programa
     'fimprog': 'END_PROGRAM',  # Fim do programa
     'se': 'IF',  # Comando if
-    'senão': 'ELSE',  # Comando else
+    'senao': 'ELSE',  # Comando else
     'enquanto': 'WHILE',  # Comando while
     'para': 'FOR'  # Comando for
 }
@@ -69,4 +70,7 @@ def t_error(t):
     t.lexer.skip(1)  # Ignora o caractere inválido e continua a análise
 
 # Constrói o analisador léxico
-lexer = lex.lex()  # Cria o analisador léxico a partir das definições acima
+def create_lexer():
+    return lex.lex()
+# criação do lexer
+lexer = create_lexer()  # Cria o analisador léxico a partir das definições acima
