@@ -1,10 +1,14 @@
 import tkinter as tk
 from tkinter import messagebox
+import logging
 import ply.lex as lex  # Biblioteca PLY para lexer
 from lexer import create_lexer  # Função para criar o lexer
-from parser import parser  # Importação do parser (supondo que esteja configurado)
+from parsercode import parser  # Importação do parser 
 from semantic import SemanticAnalyzer, SemanticError  # Classes para análise semântica
 from code_generator import CodeGenerator  # Classe para geração de código
+
+# Configuração de logs para depuração
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class CompilerGUI:
     def __init__(self, root):
@@ -44,25 +48,22 @@ class CompilerGUI:
             return
 
         try:
-            # Passo 1: Análise léxica
-            lexer = create_lexer()  # Inicializa o lexer configurado
+            logging.debug("Iniciando análise léxica.")
+            lexer = create_lexer()
             lexer.input(code)
 
-            # Passo 2: Análise sintática
-            program_ast = parser.parse(code, lexer=lexer)  # Parse para gerar a AST
-            if not program_ast:
+            logging.debug("Iniciando análise sintática.")
+            program_ast = parser.parse(code, lexer=lexer)
+            if not astcode:
                 raise Exception("Erro durante a análise sintática. Verifique o código de entrada.")
 
-            # Passo 3: Análise semântica
+            logging.debug("Iniciando análise semântica.")
             semantic_analyzer = SemanticAnalyzer()
-            semantic_analyzer.analyze_program(program_ast)  # Valida a semântica do programa
+            semantic_analyzer.analyze_program(astcode)
 
-            # Passo 4: Geração de código
+            logging.debug("Iniciando geração de código.")
             code_generator = CodeGenerator()
-            generated_code = code_generator.generate_code(program_ast)  # Gera o código final
-
-            # Exibe o código gerado
-            self.show_output(generated_code)
+            self.generated_code = code_generator.generate_code(astcode)
 
         except SemanticError as e:
             # Tratamento de erros semânticos
