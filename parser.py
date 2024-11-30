@@ -106,3 +106,31 @@ def p_error(p):
 # Construção do parser
 parser = yacc.yacc()
 
+# Testando com um código
+code = '''
+programa
+    inteiro a, b, c;
+    a := 10;
+    b := 5;
+    c := a + b * 2;
+
+    se (a < b) {
+        escreva("A é menor que B");
+    } senão {
+        escreva("A não é menor que B");
+    }
+
+    enquanto (b < 10) {
+        b := b + 1;
+        escreva(b);
+    }
+
+    para (i := 0; i < 5; i := i + 1) {
+        escreva(i);
+    }
+fimprog
+'''
+
+# Analisando o código com o parser
+parser.parse(code)
+
