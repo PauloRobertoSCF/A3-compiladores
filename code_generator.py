@@ -16,10 +16,10 @@ class CodeGenerator:
         expr = node.expression.accept(self)
         self.code.append(f"{node.var_name} = {expr};")
 
-   def visit_binary_op(self, node):
-    left_code = node.left.accept(self)
-    right_code = node.right.accept(self)
-    return f"({left_code} {node.operator} {right_code})"
+    def visit_binary_op(self, node):
+        left_code = node.left.accept(self)
+        right_code = node.right.accept(self)
+        return f"({left_code} {node.operator} {right_code})"
 
     def visit_if(self, node):
         condition = node.condition.accept(self)
@@ -47,7 +47,11 @@ class CodeGenerator:
     def visit_read(self, node):
         self.code.append(f"input({node.var_name});")
 
+    def generate_code(self):
+        return "\n".join(self.code)
+
 # Código auxiliar para expressões simples
     def visit(self, node):
         return node.accept(self)
+
 
