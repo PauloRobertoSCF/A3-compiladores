@@ -1,76 +1,69 @@
-import ply.lex as lex  # Importa a biblioteca PLY (Python Lex-Yacc) para análise léxica
+# lexer.py
+import ply.lex as lex
 
-
-# Lista de tokens para a linguagem fictícia
+# Lista de tokens
 tokens = [
-    'ID', 'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE',  # Tokens para operações matemáticas
-    'ASSIGN', 'LPAREN', 'RPAREN', 'SEMI', 'IF', 'ELSE', 'WHILE', 'FOR',  # Tokens para controle de fluxo e estrutura de programação
-    'LT', 'GT', 'LE', 'GE', 'EQ', 'NE',  # Tokens para operadores relacionais
-    'STRING', 'READ', 'WRITE', 'PROGRAM', 'END_PROGRAM'  # Tokens para palavras reservadas
+    'ID', 'NUMBER', 'ASSIGN', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE',
+    'LPAREN', 'RPAREN', 'SEMI', 'LT', 'GT', 'EQ', 'NE', 'LE', 'GE'
 ]
 
-# Palavras reservadas // Mapeamento para comandos
+# Palavras reservadas
 reserved = {
-    'inteiro': 'INT_TYPE',  # Tipo de dado inteiro
-    'decimal': 'FLOAT_TYPE',  # Tipo de dado decimal
-    'texto': 'STRING_TYPE',  # Tipo de dado string
-    'leia': 'READ',  # Comando de leitura
-    'escreva': 'WRITE',  # Comando de escrita
-    'programa': 'PROGRAM',  # Início do programa
-    'fimprog': 'END_PROGRAM',  # Fim do programa
-    'se': 'IF',  # Comando if
-    'senao': 'ELSE',  # Comando else
-    'enquanto': 'WHILE',  # Comando while
-    'para': 'FOR'  # Comando for
+    'inteiro': 'INT_TYPE',
+    'decimal': 'FLOAT_TYPE',
+    'texto': 'STRING_TYPE',
+    'programa': 'PROGRAM',
+    'fimprog': 'END_PROGRAM',
+    'se': 'IF',
+    'senao': 'ELSE',
+    'enquanto': 'WHILE',
+    'leia': 'READ',
+    'escreva': 'WRITE',
 }
-tokens += list(reserved.values())  # Adiciona as palavras reservadas à lista de tokens
 
-# Definição dos tokens por expressões regulares (regex)
-t_PLUS = r'\+' 
+tokens += list(reserved.values())
+
+# Definição de expressões regulares para os tokens
+t_ASSIGN = r':='
+t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
 t_DIVIDE = r'/'
-t_ASSIGN = r':='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_SEMI = r';'
 t_LT = r'<'
 t_GT = r'>'
-t_LE = r'<='
-t_GE = r'>='
 t_EQ = r'=='
 t_NE = r'!='
+t_LE = r'<='
+t_GE = r'>='
 
-# Expressões regulares para capturar identificadores (variáveis) e números
+# Token para identificadores
 def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'  # Expressão regular para capturar identificadores (variáveis)
-    t.type = reserved.get(t.value, 'ID')  # Verifica se o identificador é uma palavra reservada
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value, 'ID')  # Verifica se é palavra reservada
     return t
 
+# Token para números
 def t_NUMBER(t):
-    r'\d+(\.\d+)?'  # Expressão regular para capturar números inteiros e decimais
-    t.value = float(t.value) if '.' in t.value else int(t.value)  # Converte o número para float ou int
+    r'\d+(\.\d+)?'
+    t.value = float(t.value) if '.' in t.value else int(t.value)
     return t
 
-def t_STRING(t):
-    r'\"([^\\\"]|\\.)*\"'  # Expressão regular para capturar strings (entre aspas duplas)
-    return t
+# Ignorar espaços e tabulações
+t_ignore = ' \t'
 
-# Ignora espaços e tabulações
-t_ignore = ' \t'  # Define que espaços e tabulações não geram tokens
-
-# Tratamento de nova linha
+# Nova linha
 def t_newline(t):
-    r'\n+'  # Expressão regular para capturar nova linha (quebras de linha)
-    t.lexer.lineno += len(t.value)  # A cada nova linha, incrementa o número da linha no lexer
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
-# Erros de caracteres ilegais
+# Tratamento de erros
 def t_error(t):
-    print(f"Caractere ilegal: {t.value[0]} na linha {t.lineno}")  # Se o lexer encontrar um caractere ilegal
-    t.lexer.skip(1)  # Ignora o caractere inválido e continua a análise
+    print(f"Caractere ilegal: {t.value[0]}")
+    t.lexer.skip(1)
 
-# Constrói o analisador léxico
+# Função para criar o lexer
 def create_lexer():
     return lex.lex()
-# criação do lexer
-lexer = create_lexer()  # Cria o analisador léxico a partir das definições acima
