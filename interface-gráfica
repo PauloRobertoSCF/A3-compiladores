@@ -6,6 +6,7 @@ from lexer import create_lexer  # Função para criar o lexer
 from parsercode import parser  # Importação do parser 
 from semantic import SemanticAnalyzer, SemanticError  # Classes para análise semântica
 from code_generator import CodeGenerator  # Classe para geração de código
+import astcode
 
 # Configuração de logs para depuração
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -84,3 +85,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     gui = CompilerGUI(root)
     root.mainloop()
+
