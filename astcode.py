@@ -13,6 +13,10 @@ class ProgramNode(ASTNode):
     def accept(self, visitor):
         return visitor.visit_program(self)
 
+class StatementNode(ASTNode):
+    def init(self, statement):
+        super().init()
+        self.statement = statement  # Cada nó de declaração ou instrução pode ter seu próprio conteúdo
 
 class DeclarationNode(ASTNode):
     """Nó para declarações de variáveis."""
@@ -44,7 +48,7 @@ class BinaryOpNode(ASTNode):
     def accept(self, visitor):
         return visitor.visit_binary_op(self)
 
-        
+
 class VariableNode(ASTNode):
     """Nó para variáveis (usado em expressões ou atribuições)."""
     def __init__(self, var_name):
@@ -53,7 +57,6 @@ class VariableNode(ASTNode):
     def accept(self, visitor):
         """Permite que o visitante (visitor) passe por este nó."""
         return visitor.visit_variable(self)
-
 
 
 class IfNode(ASTNode):
