@@ -5,7 +5,7 @@ class SemanticAnalyzer:
         self.symbol_table = [{}]
         self.symbol_table[-1]['a'] = 'inteiro'  # Declarando 'a' como inteiro
         self.symbol_table[-1]['b'] = 'decimal'  # Declarando 'b' como decimal
-        self.symbol_table[-1]['c'] = 'texto'
+        self.symbol_table[-1]['c'] = 'texto'    # Declarando 'c' como texto
 
     def enter_scope(self):
         """Entra em um novo escopo."""
