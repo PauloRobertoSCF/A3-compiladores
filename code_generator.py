@@ -3,13 +3,12 @@ from astcode import ProgramNode, DeclarationNode, AssignmentNode, WriteNode, Rea
 class PythonCodeGenerator:
     def __init__(self):
         self.code = []
-        self.declarations = []  # Para armazenar declarações de tipos
+        self.declarations = []  
 
     def generate(self, node):
         if isinstance(node, ProgramNode):
             for statement in node.statements:
                 self.generate(statement)
-            # Adicionar as declarações no topo do código final
             self.code = self.declarations + self.code
         elif isinstance(node, DeclarationNode):
             if node.var_type == "inteiro":
