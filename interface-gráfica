@@ -1,12 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
 import logging
-from lexer import create_lexer  # Função para criar o lexer
-from parsercode import parser  # Importação do parser 
-from semantic import SemanticAnalyzer # Classes para análise semântica
-from code_generator import PythonCodeGenerator  # Classe para geração de código
+from lexer import create_lexer  
+from parsercode import parser   
+from semantic import SemanticAnalyzer 
+from code_generator import PythonCodeGenerator  
 
-# Configuração de logs para depuração
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class CompilerGUI:
@@ -14,25 +13,20 @@ class CompilerGUI:
         self.root = root
         self.root.title("Compilador de Linguagem Fictícia")
 
-        # Configuração da interface gráfica
         self.create_widgets()
 
     def create_widgets(self):
-        # Título
         self.title_label = tk.Label(self.root, text="Compilador de Linguagem Fictícia", font=("Arial", 16, "bold"))
         self.title_label.pack(pady=10)
 
-        # Área de texto para entrada do código-fonte
         self.code_label = tk.Label(self.root, text="Digite o código-fonte:")
         self.code_label.pack()
         self.code_text = tk.Text(self.root, height=15, width=60)
         self.code_text.pack(pady=10)
 
-        # Botão para compilar
         self.compile_button = tk.Button(self.root, text="Compilar", command=self.compile_code)
         self.compile_button.pack(pady=5)
 
-        # Área para exibir o código gerado
         self.output_label = tk.Label(self.root, text="Código gerado:")
         self.output_label.pack(pady=5)
         self.output_text = tk.Text(self.root, height=15, width=60, bg="#f0f0f0", state="disabled")
@@ -40,7 +34,7 @@ class CompilerGUI:
 
     def compile_code(self):
         """Realiza o processo de compilação ao clicar no botão."""
-        code = self.code_text.get("1.0", tk.END).strip()  # Obtém o código-fonte digitado
+        code = self.code_text.get("1.0", tk.END).strip()  
 
         if not code:
             messagebox.showwarning("Aviso", "Por favor, insira o código-fonte antes de compilar.")
@@ -56,7 +50,6 @@ class CompilerGUI:
             if not ProgramNode:
                 raise Exception("Erro durante a análise sintática. Verifique o código de entrada.")
 
-            # Exibir a AST gerada para depuração
             print("AST gerada:", ProgramNode)
 
             logging.debug("Iniciando análise semântica.")
@@ -66,25 +59,31 @@ class CompilerGUI:
             logging.debug("Iniciando geração de código.")
             code_generator = PythonCodeGenerator()
             code_generator.generate(ProgramNode)
-            self.code = code_generator.get_code()  # Obtenha o código gerado como string
+            self.code = code_generator.get_code()  
 
             self.show_output(self.code)
 
         except Exception as e:
-            # Tratamento de outros erros
             messagebox.showerror("Erro de compilação", f"Ocorreu um erro: {str(e)}")
             
 
     def show_output(self, code):
         """Exibe o código gerado na interface."""
         try:
-            self.output_text.config(state="normal")  # Permite edição temporária
-            self.output_text.delete("1.0", tk.END)  # Limpa o conteúdo anterior
-            self.output_text.insert(tk.END, code)  # Insere o novo código gerado
-            self.output_text.config(state="disabled")  # Bloqueia edição
+            self.output_text.config(state="normal")  
+            self.output_text.delete("1.0", tk.END) 
+            self.output_text.insert(tk.END, code) 
+            self.output_text.config(state="disabled")  
 
         except Exception as e:
             print(f"Erro ao exibir código gerado: {e}")
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    gui = CompilerGUI(root)
+    root.mainloop()
+
 
 
 if __name__ == "__main__":
