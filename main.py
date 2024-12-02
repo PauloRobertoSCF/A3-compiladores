@@ -1,74 +1,57 @@
-import sys
-from lexer import lexer
 from parsercode import parser
-from semantic import SemanticAnalyzer, SemanticError
-from code_generator import CodeGenerator
+import ply.yacc as yacc
+from lexer import create_lexer
+from semantic import SemanticAnalyzer
+from code_generator import PythonCodeGenerator
+from astcode import ProgramNode
 
-def main():
-    # Solicita ao usuário um arquivo de entrada
-    if len(sys.argv) != 2:
-        print("Uso: python main.py <arquivo>")
-        return
-
-    input_file = sys.argv[1]
-    
-    try:
-        # Lê o código fonte do arquivo
-        with open(input_file, 'r') as f:
-            source_code = f.read()
-
-        print("\n=== CÓDIGO FONTE ===")
-        print(source_code)
-
-        # === Etapa 1: Análise Léxica ===
-        print("\n=== ANÁLISE LÉXICA ===")
-        lexer.input(source_code)
-        while True:
-            token = lexer.token()
-            if not token:
-                break
-            print(token)
-
-        # === Etapa 2: Análise Sintática ===
-        print("\n=== ANÁLISE SINTÁTICA ===")
-        ast = parser.parse(source_code, lexer=lexer)
-        if ast is None:
-            print("Erro na análise sintática.")
-            return
-
-        print("AST gerada com sucesso.")
-
-        # === Etapa 3: Análise Semântica ===
-        print("\n=== ANÁLISE SEMÂNTICA ===")
-        analyzer = SemanticAnalyzer()
-        try:
-            analyzer.analyze_program(ast)  # O método `analyze_program` percorre a AST para validações semânticas
-            print("Análise semântica concluída com sucesso.")
-        except SemanticError as e:
-            print(f"Erro semântico: {e}")
-            return
-
-        # === Etapa 4: Geração de Código ===
-        print("\n=== GERAÇÃO DE CÓDIGO ===")
-        generator = CodeGenerator()
-        target_code = generator.generate_code(ast)
-
-        print("\n=== CÓDIGO GERADO ===")
-        print(target_code)
-
-        # Opcional: Escrever o código gerado em um arquivo de saída
-        output_file = input_file.replace('.txt', '_output.txt')
-        with open(output_file, 'w') as f:
-            f.write(target_code)
-
-        print(f"\nCódigo gerado salvo em: {output_file}")
-
-    except FileNotFoundError:
-        print(f"Erro: Arquivo '{input_file}' não encontrado.")
-    except Exception as e:
-        print(f"Erro inesperado: {e}")
 
 if __name__ == "__main__":
-    main()
+    # Código fictício de entrada
+    program_code = """
+programa
+    inteiro a;
+    decimal b;
+    texto c;
+
+    a := 10;
+    b := 3.14;
+    c := "oi";
+
+    escreva a;
+    escreva b;
+    escreva c;
+
+    se (a < 9)
+        escreva "a < 9";
+    senao
+        escreva "a >= 9";
+
+    enquanto (a > 0)
+        escreva a;
+        a := a - 1;
+
+    para (a := 0; a < 5; a := a + 1)
+        escreva a;
+fimprog
+    """
+
+    # Lexer e Parser
+    lexer = create_lexer()
+    parser = yacc.yacc(debug=True)
+    astcode = parser.parse(program_code, lexer=lexer)
+
+    # Análise Semântica
+    semantic_analyzer = SemanticAnalyzer()
+    semantic_analyzer.analyze_program(ProgramNode)
+
+    # Geração de Código Python
+    code_generator = PythonCodeGenerator()
+    code_generator.generate(ProgramNode) 
+    code = code_generator.get_code()
+
+    # Exibir código gerado
+    print("Código Python Gerado:")
+    print(code)
     
     
