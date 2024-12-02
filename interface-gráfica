@@ -1,12 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
 import logging
-import ply.lex as lex  # Biblioteca PLY para lexer
 from lexer import create_lexer  # Função para criar o lexer
 from parsercode import parser  # Importação do parser 
-from semantic import SemanticAnalyzer, SemanticError  # Classes para análise semântica
-from code_generator import CodeGenerator  # Classe para geração de código
-import astcode
+from semantic import SemanticAnalyzer # Classes para análise semântica
+from code_generator import PythonCodeGenerator  # Classe para geração de código
 
 # Configuração de logs para depuração
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -54,35 +52,42 @@ class CompilerGUI:
             lexer.input(code)
 
             logging.debug("Iniciando análise sintática.")
-            program_ast = parser.parse(code, lexer=lexer)
-            if not astcode:
+            ProgramNode = parser.parse(code, lexer=lexer)
+            if not ProgramNode:
                 raise Exception("Erro durante a análise sintática. Verifique o código de entrada.")
+
+            # Exibir a AST gerada para depuração
+            print("AST gerada:", ProgramNode)
 
             logging.debug("Iniciando análise semântica.")
             semantic_analyzer = SemanticAnalyzer()
-            semantic_analyzer.analyze_program(astcode)
+            semantic_analyzer.analyze_program(ProgramNode)
 
             logging.debug("Iniciando geração de código.")
-            code_generator = CodeGenerator()
-            self.generated_code = code_generator.generate_code(astcode)
+            code_generator = PythonCodeGenerator()
+            code_generator.generate(ProgramNode)
+            self.code = code_generator.get_code()  # Obtenha o código gerado como string
 
-        except SemanticError as e:
-            # Tratamento de erros semânticos
-            messagebox.showerror("Erro Semântico", f"Erro semântico: {str(e)}")
+            self.show_output(self.code)
+
         except Exception as e:
             # Tratamento de outros erros
             messagebox.showerror("Erro de compilação", f"Ocorreu um erro: {str(e)}")
+            
 
-    def show_output(self, generated_code):
+    def show_output(self, code):
         """Exibe o código gerado na interface."""
-        self.output_text.config(state="normal")  # Permite edição temporária
-        self.output_text.delete("1.0", tk.END)  # Limpa o conteúdo anterior
-        self.output_text.insert(tk.END, generated_code)  # Insere o novo código gerado
-        self.output_text.config(state="disabled")  # Bloqueia edição
+        try:
+            self.output_text.config(state="normal")  # Permite edição temporária
+            self.output_text.delete("1.0", tk.END)  # Limpa o conteúdo anterior
+            self.output_text.insert(tk.END, code)  # Insere o novo código gerado
+            self.output_text.config(state="disabled")  # Bloqueia edição
+
+        except Exception as e:
+            print(f"Erro ao exibir código gerado: {e}")
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     gui = CompilerGUI(root)
     root.mainloop()
-
