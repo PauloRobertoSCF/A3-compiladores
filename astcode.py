@@ -16,7 +16,7 @@ class ProgramNode(ASTNode):
 class StatementNode(ASTNode):
     def init(self, statement):
         super().init()
-        self.statement = statement  # Cada nó de declaração ou instrução pode ter seu próprio conteúdo
+        self.statement = statement  
 
 class DeclarationNode(ASTNode):
     """Nó para declarações de variáveis."""
@@ -41,9 +41,9 @@ class AssignmentNode(ASTNode):
 class BinaryOpNode(ASTNode):
     """Nó para operações binárias (e.g., soma, subtração, multiplicação)."""
     def __init__(self, left, operator, right):
-        self.left = left       # Operando esquerdo
-        self.operator = operator  # Operador (+, -, *)
-        self.right = right     # Operando direito
+        self.left = left       
+        self.operator = operator  
+        self.right = right     
 
     def accept(self, visitor):
         return visitor.visit_binary_op(self)
@@ -52,7 +52,7 @@ class BinaryOpNode(ASTNode):
 class VariableNode(ASTNode):
     """Nó para variáveis (usado em expressões ou atribuições)."""
     def __init__(self, var_name):
-        self.var_name = var_name  # O nome da variável
+        self.var_name = var_name  
 
     def accept(self, visitor):
         """Permite que o visitante (visitor) passe por este nó."""
@@ -84,7 +84,7 @@ class WhileNode(ASTNode):
 class WriteNode(ASTNode):
     """Nó para instruções 'escreva'."""
     def __init__(self, expression):
-        self.expression = expression  # Certifique-se de que é uma única expressão
+        self.expression = expression  
 
     def accept(self, visitor):
         return visitor.visit_write(self)
@@ -108,12 +108,11 @@ class ForNode(ASTNode):
         :param step: O incremento ou passo do laço (pode ser None).
         :param body: O corpo do laço (uma lista de nós de instruções).
         """
-        self.variable = variable  # Identificador da variável de controle
-        self.start = start        # Valor inicial
-        self.end = end            # Condição de parada
-        self.step = step          # Incremento ou passo (pode ser opcional)
-        self.body = body          # Corpo do laço (lista de nós)
-
+        self.variable = variable  
+        self.start = start        
+        self.end = end            
+        self.step = step          
+        self.body = body         
     def accept(self, visitor): 
         return visitor.visit_for(self)
 
@@ -167,3 +166,4 @@ class ComparisonNode:
             return left_value != right_value
         else:
             raise ValueError(f"Operador desconhecido: {self.operator}")
+
