@@ -2,7 +2,7 @@ import ply.yacc as yacc
 from lexer import tokens
 from astcode import ProgramNode, VariableNode, DeclarationNode, AssignmentNode, BinaryOpNode, IfNode, WhileNode, ForNode, WriteNode, ReadNode, ComparisonNode
 
-# Regras de Produção
+
 def p_program(p):
     '''program : PROGRAM statement_list END_PROGRAM'''
     p[0] = ProgramNode(p[2])
@@ -42,7 +42,6 @@ def p_expression_id(p):
     """
     expression : ID
     """
-    # Cria um nó que representa o uso de uma variável
     p[0] = VariableNode(p[1])
 
 def p_expression_comparison(p):
@@ -54,7 +53,7 @@ def p_expression_comparison(p):
                | expression EQ expression
                | expression NE expression
     """
-    p[0] = ComparisonNode(p[2], p[1], p[3])  # Criação de nó para comparações
+    p[0] = ComparisonNode(p[2], p[1], p[3])  
 
 def p_assignment(p):
     '''assignment : ID ASSIGN expression SEMI'''
@@ -62,7 +61,6 @@ def p_assignment(p):
 
 def p_write(p):
     '''write : WRITE expression SEMI'''
-    # A expressão deve ser um nó único, não uma lista
     if isinstance(p[2], list):
         raise TypeError("Erro no parser: 'WRITE' recebeu múltiplas expressões.")
     p[0] = WriteNode(p[2])
@@ -105,7 +103,7 @@ def p_expression_prime(p):
 
 def p_expression_string(p):
     '''expression : STRING'''
-    p[0] = p[1]  # STRING será tratado como um literal de texto
+    p[0] = p[1]  
 
 def p_term(p):
     '''term : factor term_prime'''
@@ -140,5 +138,4 @@ def p_error(p):
     print(f"Erro de sintaxe no token {p.type}" if p else "Erro de sintaxe no final do arquivo")
 
 
-# Criar o parser
 parser = yacc.yacc(debug=True)
