@@ -110,5 +110,3 @@ class SemanticAnalyzer:
             return "decimal"
         elif isinstance(expression, str):
             return "texto"
-
- 
