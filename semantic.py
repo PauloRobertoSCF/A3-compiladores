@@ -4,8 +4,8 @@ from astcode import ProgramNode, DeclarationNode, AssignmentNode, BinaryOpNode, 
 class SemanticAnalyzer:
     def __init__(self):
         self.symbol_table = [{}]
-        self.symbol_table[-1]['a'] = 'inteiro'  # Declarando 'a' como inteiro
-        self.symbol_table[-1]['b'] = 'decimal'  # Declarando 'b' como decimal
+        self.symbol_table[-1]['a'] = 'inteiro'  
+        self.symbol_table[-1]['b'] = 'decimal'  
         self.symbol_table[-1]['c'] = 'texto'
 
     def enter_scope(self):
@@ -35,7 +35,6 @@ class SemanticAnalyzer:
             var_type = self.check_variable(node.var_name)
             expr_type = self.analyze_expression(node.expression)
             if var_type == expr_type or (var_type == "decimal" and expr_type == "inteiro"):
-                    # Permitir conversão implícita de decimal para inteiro
                 return
             raise Exception(f"Erro: Atribuição incompatível. '{node.var_name}' é do tipo '{var_type}', mas recebeu '{expr_type}'.")
         elif isinstance(node, BinaryOpNode):
@@ -52,7 +51,7 @@ class SemanticAnalyzer:
             if node.else_branch:
                 self.analyze_program(node.else_branch)
             self.exit_scope()
-        elif isinstance(node, ForNode): # Certificar que as variáveis estão corretamente declaradas e analisadas
+        elif isinstance(node, ForNode): 
             self.analyze_program(node.start)
             cond_type = self.analyze_expression(node.end)
             if cond_type not in ["inteiro", "decimal"]:
@@ -85,10 +84,8 @@ class SemanticAnalyzer:
         if isinstance(expression, BinaryOpNode):
             left_type = self.analyze_expression(expression.left)
             right_type = self.analyze_expression(expression.right)
-            # Permitir concatenação de texto
             if left_type == "texto" and right_type == "texto" and expression.operator == "+":
                 return "texto"
-            # Promoção entre decimal e inteiro
             if left_type == right_type:
                 return left_type
             if left_type == "inteiro" and right_type == "decimal":
@@ -102,7 +99,7 @@ class SemanticAnalyzer:
             left_type = self.analyze_expression(expression.left)
             right_type = self.analyze_expression(expression.right)
             if left_type == right_type:
-                return "inteiro"  # Comparações resultam em 'inteiro' para compatibilidade
+                return "inteiro" 
             raise Exception(f"Erro: Comparação entre tipos incompatíveis: '{left_type}' e '{right_type}'.")
         elif isinstance(expression, int):
             return "inteiro"
@@ -110,3 +107,4 @@ class SemanticAnalyzer:
             return "decimal"
         elif isinstance(expression, str):
             return "texto"
+
