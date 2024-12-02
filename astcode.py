@@ -63,11 +63,12 @@ class IfNode(ASTNode):
     """Nó para estruturas condicionais."""
     def __init__(self, condition, then_branch, else_branch=None):
         self.condition = condition
-        self.then_branch = then_branch
-        self.else_branch = else_branch
+        self.then_branch = [then_branch] if not isinstance(then_branch, list) else then_branch
+        self.else_branch = [else_branch] if else_branch and not isinstance(else_branch, list) else else_branch
 
     def accept(self, visitor):
         return visitor.visit_if(self)
+
 
 
 class WhileNode(ASTNode):
@@ -83,11 +84,10 @@ class WhileNode(ASTNode):
 class WriteNode(ASTNode):
     """Nó para instruções 'escreva'."""
     def __init__(self, expression):
-        self.expression = expression
+        self.expression = expression  # Certifique-se de que é uma única expressão
 
     def accept(self, visitor):
         return visitor.visit_write(self)
-
 
 class ReadNode(ASTNode):
     """Nó para instruções 'leia'."""
@@ -96,4 +96,74 @@ class ReadNode(ASTNode):
 
     def accept(self, visitor):
         return visitor.visit_read(self)
+    
+class ForNode(ASTNode):
+    def __init__(self, variable, start, end, step, body):
+        """
+        Representa um nó de laço 'for' na AST.
 
+        :param variable: A variável de controle do laço (ex.: 'i').
+        :param start: O valor inicial do laço.
+        :param end: A condição de parada ou valor final do laço.
+        :param step: O incremento ou passo do laço (pode ser None).
+        :param body: O corpo do laço (uma lista de nós de instruções).
+        """
+        self.variable = variable  # Identificador da variável de controle
+        self.start = start        # Valor inicial
+        self.end = end            # Condição de parada
+        self.step = step          # Incremento ou passo (pode ser opcional)
+        self.body = body          # Corpo do laço (lista de nós)
+
+    def accept(self, visitor): 
+        return visitor.visit_for(self)
+
+    def repr(self):
+        """Representação legível para depuração."""
+        return (f"ForNode(variable={self.variable}, start={self.start}, "
+                f"end={self.end}, step={self.step}, body={self.body})")
+    def accept(self, visitor):
+        return visitor.visit_for(self)
+
+class ComparisonNode:
+    def __init__(self, operator, left, right):
+        """
+        Inicializa o nó de comparação.
+
+        :param operator: Operador da comparação (e.g., '<', '>', '==')
+        :param left: Expressão à esquerda do operador
+        :param right: Expressão à direita do operador
+        """
+        self.operator = operator
+        self.left = left
+        self.right = right
+
+    def __repr__(self):
+        """
+        Representação do nó para depuração.
+        """
+        return f"ComparisonNode(operator='{self.operator}', left={self.left}, right={self.right})"
+
+    def evaluate(self, context):
+        """
+        Avalia o nó de comparação no contexto atual (opcional).
+
+        :param context: Um dicionário ou objeto que mapeia variáveis para valores.
+        :return: O resultado booleano da comparação.
+        """
+        left_value = self.left.evaluate(context) if isinstance(self.left, ASTNode) else self.left
+        right_value = self.right.evaluate(context) if isinstance(self.right, ASTNode) else self.right
+
+        if self.operator == '<':
+            return left_value < right_value
+        elif self.operator == '>':
+            return left_value > right_value
+        elif self.operator == '<=':
+            return left_value <= right_value
+        elif self.operator == '>=':
+            return left_value >= right_value
+        elif self.operator == '==':
+            return left_value == right_value
+        elif self.operator == '!=':
+            return left_value != right_value
+        else:
+            raise ValueError(f"Operador desconhecido: {self.operator}")
