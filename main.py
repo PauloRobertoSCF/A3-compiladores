@@ -7,7 +7,6 @@ from astcode import ProgramNode
 
 
 if __name__ == "__main__":
-    # Código fictício de entrada
     program_code = """
 programa
     inteiro a;
@@ -36,20 +35,16 @@ programa
 fimprog
     """
 
-    # Lexer e Parser
     lexer = create_lexer()
     parser = yacc.yacc(debug=True)
     astcode = parser.parse(program_code, lexer=lexer)
 
-    # Análise Semântica
     semantic_analyzer = SemanticAnalyzer()
     semantic_analyzer.analyze_program(ProgramNode)
 
-    # Geração de Código Python
     code_generator = PythonCodeGenerator()
     code_generator.generate(ProgramNode) 
     code = code_generator.get_code()
 
-    # Exibir código gerado
     print("Código Python Gerado:")
     print(code)
