@@ -142,5 +142,3 @@ def p_error(p):
 
 # Criar o parser
 parser = yacc.yacc(debug=True)
-
-
