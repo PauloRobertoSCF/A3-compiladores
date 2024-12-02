@@ -1,12 +1,10 @@
 import ply.lex as lex
 
-# Lista de tokens
 tokens = [
     'ID', 'NUMBER', 'ASSIGN', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE',
     'LPAREN', 'RPAREN', 'SEMI', 'LT', 'GT', 'EQ', 'NE', 'LE', 'GE', 'STRING'
 ]
 
-# Palavras reservadas
 reserved = {
     'inteiro': 'INT_TYPE',
     'decimal': 'FLOAT_TYPE',
@@ -23,7 +21,6 @@ reserved = {
 
 tokens += list(reserved.values())
 
-# Regular expressions para tokens
 t_ASSIGN = r':='
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -39,36 +36,29 @@ t_NE = r'!='
 t_LE = r'<='
 t_GE = r'>='
 
-# Token para identificadores
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'ID')  # Identifica palavras reservadas
+    t.type = reserved.get(t.value, 'ID')  
     return t
 
-# Token para números (inteiros e decimais)
 def t_NUMBER(t):
     r'\d+(\.\d+)?'
     t.value = float(t.value) if '.' in t.value else int(t.value)
     return t
 
-# Ignorar espaços e tabulações
 t_ignore = ' \t'
 
-# Nova linha
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# Tratamento de erros
 def t_error(t):
     print(f"Caractere ilegal: {t.value[0]}")
     t.lexer.skip(1)
 
-# Função para criar o lexer
 def create_lexer():
     return lex.lex()
 
-# Regras de palavras reservadas
 def t_IF(t):
     r'se'
     t.type = 'IF'
@@ -81,5 +71,6 @@ def t_ELSE(t):
 
 def t_STRING(t):
     r'\"[^\"\n]*\"'
-    t.value = t.value[1:-1]  # Remove as aspas
+    t.value = t.value[1:-1]  
     return t
+
