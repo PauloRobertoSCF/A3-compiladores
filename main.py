@@ -53,5 +53,3 @@ fimprog
     # Exibir código gerado
     print("Código Python Gerado:")
     print(code)
-    
-    
